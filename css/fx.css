@@ -1,0 +1,328 @@
+/* ==========================================================================
+   Belthor – effectlaag: licht, goud, beweging. Alles valt weg bij reduced motion.
+   ========================================================================== */
+:root {
+  --gold-grad: linear-gradient(100deg, #8a6a24 0%, #d4af52 22%, #f6e3a1 40%, #d4af52 58%, #9c7a2e 80%, #e8cc78 100%);
+  --chrome-grad: linear-gradient(100deg, #7d8088 0%, #e9ebef 35%, #a7aab1 60%, #f4f5f7 80%, #8d9097 100%);
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(212, 175, 82, 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(212, 175, 82, 0.05), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+/* fijne korrel over de hele pagina */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+main, header, footer, #app { position: relative; z-index: 2; }
+
+/* ---------- header: glas + gouden lijn ---------- */
+.site-header {
+  background: rgba(11, 11, 12, 0.72);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+.site-header.scrolled { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); background: rgba(11, 11, 12, 0.88); }
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 82, 0.7), transparent);
+}
+.main-nav a { position: relative; }
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0;
+  height: 2px;
+  background: var(--gold-grad);
+  transition: right 0.3s ease;
+}
+.main-nav a:hover::after,
+.main-nav a[aria-current="page"]::after { right: 0; }
+
+/* ---------- goud & chroom tekst ---------- */
+.gold-text {
+  background: var(--gold-grad);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 6s linear infinite;
+}
+.chrome-text {
+  background: var(--chrome-grad);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sheen 8s linear infinite;
+}
+@keyframes sheen { to { background-position: 200% center; } }
+
+.btn-gold {
+  background: var(--gold-grad);
+  background-size: 200% auto;
+  border: 0;
+  box-shadow: 0 6px 24px rgba(212, 175, 82, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: background-position 0.6s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-gold:hover {
+  background: var(--gold-grad);
+  background-size: 200% auto;
+  background-position: 100% center;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 34px rgba(212, 175, 82, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-whatsapp { box-shadow: 0 6px 24px rgba(37, 211, 102, 0.25); transition: transform 0.2s ease; }
+.btn-whatsapp:hover { transform: translateY(-2px); }
+.btn-ghost { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(212, 175, 82, 0.45); color: var(--text); backdrop-filter: blur(6px); }
+.btn-ghost:hover { border-color: var(--gold); background: rgba(212, 175, 82, 0.08); color: var(--text); }
+
+/* ---------- HERO ---------- */
+.hero-x {
+  position: relative;
+  overflow: hidden;
+  padding: 56px 0 140px;
+  border-bottom: 0;
+  isolation: isolate;
+}
+.hero-x::before { /* spotlight */
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(246, 227, 161, 0.16) 0%, rgba(212, 175, 82, 0.06) 35%, transparent 65%);
+  z-index: -1;
+  animation: breathe 7s ease-in-out infinite;
+}
+@keyframes breathe { 50% { transform: scale(1.08); opacity: 0.8; } }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  gap: 32px;
+  align-items: center;
+}
+.hero-x h1 { font-size: clamp(36px, 5.4vw, 66px); line-height: 1.04; margin: 0; letter-spacing: 0.005em; text-wrap: balance; }
+.hero-x .lead { margin: 22px 0 30px; font-size: 18px; color: var(--text-2); max-width: 560px; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-cta .btn { min-height: 52px; padding: 12px 24px; font-size: 16px; }
+
+.hero-stage { position: relative; aspect-ratio: 1900 / 320; margin-right: min(-2vw, -24px); transform: scale(1.06); transform-origin: left center; }
+.hero-stage svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.car-line {
+  fill: none;
+  stroke: url(#goldStroke);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 2.6s cubic-bezier(.65, 0, .35, 1) 0.2s forwards;
+  filter: drop-shadow(0 0 6px rgba(246, 227, 161, 0.55));
+}
+.car-line.thin { stroke-width: 5; animation-delay: 0.9s; opacity: 0.8; }
+.car-wheel { animation-delay: 1.3s; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.headlight { opacity: 0; animation: lightOn 0.6s ease 2.6s forwards, flicker 4s ease-in-out 3.4s infinite; }
+@keyframes lightOn { to { opacity: 1; } }
+@keyframes flicker { 50% { opacity: 0.75; } }
+.taillight { opacity: 0; animation: lightOn 0.5s ease 2.8s forwards; }
+.beam { opacity: 0; animation: lightOn 1s ease 2.8s forwards; }
+.road-line { stroke-dasharray: 26 34; animation: road 0.9s linear infinite; }
+@keyframes road { to { stroke-dashoffset: -60; } }
+.floor-glow { opacity: 0; animation: lightOn 1.2s ease 2.2s forwards; }
+
+/* zoekkaart die over de hero heen schuift */
+.search-wrap { position: relative; z-index: 3; margin-top: -96px; }
+.search-card {
+  background: linear-gradient(180deg, rgba(30, 30, 34, 0.82), rgba(18, 18, 20, 0.9));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 82, 0.28);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- ticker ---------- */
+.ticker {
+  margin-top: 48px;
+  border-top: 1px solid rgba(212, 175, 82, 0.18);
+  border-bottom: 1px solid rgba(212, 175, 82, 0.18);
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.ticker-track { display: inline-flex; gap: 48px; padding: 16px 0; animation: marquee 32s linear infinite; }
+.ticker-track span { font-family: "Cinzel", Georgia, serif; font-size: 18px; letter-spacing: 0.08em; color: var(--text-2); display: inline-flex; align-items: center; gap: 48px; }
+.ticker-track span::after { content: "◆"; color: var(--gold); font-size: 10px; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- cijfers ---------- */
+.stats-x { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.stat-x {
+  position: relative;
+  padding: 22px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.stat-x strong { display: block; font-family: "Cinzel", Georgia, serif; font-size: 44px; line-height: 1; }
+.stat-x span { color: var(--muted); font-size: 14px; }
+
+/* ---------- kaarten ---------- */
+.car-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+}
+.car-card::before { /* gouden rand bij hover */
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gold-grad);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+.car-card::after { /* lichtvlek die de muis volgt */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(246, 227, 161, 0.12), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+.car-card:hover { border-color: transparent; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 82, 0.15); }
+.car-card:hover::before,
+.car-card:hover::after { opacity: 1; }
+.car-card .media { overflow: hidden; }
+.car-card .media img { transition: transform 0.6s cubic-bezier(.2, .7, .2, 1); }
+.car-card:hover .media img { transform: scale(1.06); }
+.car-card .media::after { /* glansstreep */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+.car-card:hover .media::after { animation: shine 0.9s ease; }
+@keyframes shine { to { left: 130%; } }
+.car-card .price { background: var(--gold-grad); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.no-photo { background: radial-gradient(ellipse at 50% 120%, rgba(212, 175, 82, 0.16), transparent 60%), #17171a; }
+.no-photo svg { transition: transform 0.5s ease; }
+.car-card:hover .no-photo svg { transform: translateX(8px); }
+
+/* ---------- sectietitels ---------- */
+.section-head h2,
+.display.underline { position: relative; padding-bottom: 12px; }
+.section-head h2::after,
+.display.underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 64px;
+  background: var(--gold-grad);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.9s cubic-bezier(.2, .7, .2, 1) 0.2s;
+}
+.in .section-head h2::after,
+.section-head.in h2::after,
+.display.underline.in::after { transform: scaleX(1); }
+
+.usp {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01));
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.usp:hover { transform: translateY(-4px); border-color: rgba(212, 175, 82, 0.5); }
+.usp .ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 14px; background: rgba(212, 175, 82, 0.1); border: 1px solid rgba(212, 175, 82, 0.35); }
+.usp::before { display: none; }
+
+.steps li { transition: transform 0.3s ease, border-color 0.3s ease; }
+.steps li:hover { transform: translateX(6px); border-color: rgba(212, 175, 82, 0.5); }
+.steps .num { font-size: 34px; background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* consignatie-band */
+.cta-band {
+  position: relative;
+  border-radius: 22px;
+  padding: clamp(28px, 4vw, 56px);
+  background:
+    radial-gradient(700px 300px at 100% 0%, rgba(212, 175, 82, 0.16), transparent 60%),
+    linear-gradient(180deg, #17171a, #101012);
+  border: 1px solid rgba(212, 175, 82, 0.25);
+  overflow: hidden;
+}
+
+/* ---------- detail ---------- */
+.price-box { position: relative; overflow: hidden; background: linear-gradient(180deg, #19191c, #121214); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
+.price-box .price { background: var(--gold-grad); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: sheen 6s linear infinite; }
+.detail-aside { position: sticky; top: 110px; }
+.key-data div { background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)); }
+.key-data dd { font-size: 19px; }
+.gallery-main { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
+
+/* ---------- scroll-reveal ---------- */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2, .7, .2, 1); }
+.reveal.in { opacity: 1; transform: none; }
+
+.wa-float { animation: pulse 2.6s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5), 0 6px 20px rgba(0, 0, 0, 0.5); } 60% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0), 0 6px 20px rgba(0, 0, 0, 0.5); } }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-stage { order: -1; margin: 8px 0 12px; width: 100%; transform: none; }
+  .detail-aside { position: static; }
+}
+@media (max-width: 640px) {
+  .hero-x { padding: 28px 0 120px; }
+  .ticker-track span { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .car-line { stroke-dashoffset: 0; }
+  .headlight, .taillight, .beam, .floor-glow { opacity: 1; }
+  .reveal { opacity: 1; transform: none; }
+  .section-head h2::after, .display.underline::after { transform: scaleX(1); }
+}
+
+/* na het verschijnen moet de tilt snel reageren */
+.car-card.reveal.in { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, opacity 0.8s ease; }

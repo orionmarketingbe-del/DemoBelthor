@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belthor Automotive</title>
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main class="container" style="padding:20px 24px 64px" id="page"></main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/forms.js"></script>
+<script>
+(function () {
+  var B = window.Belthor, t = B.t, esc = B.esc;
+  B.renderChrome("stock");
+  var id = new URLSearchParams(window.location.search).get("id");
+  var v = B.visibleVehicles().filter(function (x) { return x.id === id; })[0];
+  var page = document.getElementById("page");
+
+  if (!v) {
+    page.innerHTML =
+      '<div style="padding:60px 0;text-align:center"><h1 class="display" style="font-size:32px">' + esc(t("notFound.title")) +
+      '</h1><p class="muted">' + esc(t("notFound.text")) + '</p><a class="btn btn-gold" href="aanbod.html" style="margin-top:16px">' +
+      esc(t("notFound.cta")) + "</a></div>";
+    return;
+  }
+
+  var title = B.title(v);
+  var pr = B.price(v);
+  var s = B.getSettings();
+  var wa = B.waNumber(s);
+  var ref = v.id.toUpperCase();
+  document.title = title + " " + v.year + " – " + pr.main + " | Belthor Automotive";
+
+  function row(label, value) {
+    return "<div><dt>" + esc(label) + "</dt><dd>" + esc(value) + "</dd></div>";
+  }
+  var hp = v.power_kw ? v.power_kw + " kW (" + B.kwToHp(v.power_kw) + " " + t("vehicle.hp") + ")" : null;
+
+  var key = [
+    [t("vehicle.mileage"), B.km(v.mileage_km)],
+    [t("vehicle.firstRegistration"), B.firstReg(v)],
+    [t("vehicle.fuel"), B.fuelLabel(v)],
+    [t("vehicle.transmission"), B.transLabel(v)],
+  ];
+  if (hp) key.push([t("vehicle.power"), hp]);
+
+  var specs = [[t("vehicle.make"), v.make], [t("vehicle.model"), v.model]];
+  if (v.version) specs.push([t("vehicle.version"), v.version]);
+  specs.push([t("vehicle.type"), t("vehicle.types." + v.vehicle_type)]);
+  specs.push([t("vehicle.firstRegistration"), B.firstReg(v)]);
+  specs.push([t("vehicle.mileage"), B.km(v.mileage_km)]);
+  specs.push([t("vehicle.fuel"), B.fuelLabel(v)]);
+  specs.push([t("vehicle.transmission"), B.transLabel(v)]);
+  if (hp) specs.push([t("vehicle.power"), hp]);
+  if (v.engine_cc) specs.push([t("vehicle.engine"), B.num(v.engine_cc) + " cm³"]);
+  if (v.euro_norm) specs.push([t("vehicle.euroNorm"), v.euro_norm.replace("euro", "Euro ")]);
+  if (v.co2_gkm != null) specs.push([t("vehicle.co2"), v.co2_gkm + " g/km"]);
+  if (v.color) specs.push([t("vehicle.color"), v.color]);
+  if (v.doors) specs.push([t("vehicle.doors"), String(v.doors)]);
+  if (v.seats) specs.push([t("vehicle.seats"), String(v.seats)]);
+  if (v.previous_owners != null) specs.push([t("vehicle.owners"), String(v.previous_owners)]);
+  specs.push([t("vehicle.reference"), ref]);
+
+  var docs = [];
+  if (v.has_inspection) docs.push(t("detail.inspection"));
+  if (v.has_pink_card) docs.push(t("detail.pinkCard"));
+  if (v.has_carpass) docs.push(t("detail.carpass"));
+  if (v.has_service_book) docs.push(t("detail.serviceBook"));
+  if (v.warranty) docs.push(t("detail.warranty") + ": " + v.warranty);
+
+  var features = (v.features || []).map(function (f) { return t("vehicle.features." + f); });
+  var desc = B.description(v);
+  var isSold = v.status === "sold";
+  var waText = t("detail.waMessage", { car: title, year: v.year, price: pr.main, ref: ref });
+  var photos = v.photos || [];
+
+  page.innerHTML =
+    '<p class="breadcrumbs"><a href="index.html">Home</a> › <a href="aanbod.html">' + esc(t("stock.title")) + "</a> › " + esc(title) + "</p>" +
+    '<div class="detail-layout"><div class="detail-main">' +
+      '<div id="gallery"></div>' +
+      '<div><h1 class="display" style="margin:0;font-size:34px">' + esc(title) + "</h1>" +
+        (v.version ? '<p class="muted" style="margin:6px 0 0;font-size:16px">' + esc(v.version) + "</p>" : "") +
+        '<dl class="key-data" style="margin:20px 0 0">' + key.map(function (k) { return row(k[0], k[1]); }).join("") + "</dl></div>" +
+      '<section><h2 style="margin:0 0 8px;font-size:22px">' + esc(t("detail.techData")) + '</h2><dl class="spec-table">' +
+        specs.map(function (k) { return row(k[0], k[1]); }).join("") + "</dl></section>" +
+      (features.length ? '<section><h2 style="margin:0 0 14px;font-size:22px">' + esc(t("detail.equipment")) + '</h2><ul class="pills">' +
+        features.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></section>" : "") +
+      (docs.length ? '<section><h2 style="margin:0 0 14px;font-size:22px">' + esc(t("detail.documents")) + '</h2><ul class="doc-list">' +
+        docs.map(function (d) { return "<li>" + esc(d) + "</li>"; }).join("") + "</ul></section>" : "") +
+      (desc ? '<section><h2 style="margin:0 0 10px;font-size:22px">' + esc(t("detail.description")) + '</h2><p class="description">' + esc(desc) + "</p></section>" : "") +
+    "</div>" +
+    '<aside class="detail-aside"><div class="price-box">' +
+      (isSold ? '<p class="notice">' + esc(t("detail.soldNotice")) + "</p>" : "") +
+      (v.status === "reserved" ? '<p class="notice notice-reserved">' + esc(t("detail.reservedNotice")) + "</p>" : "") +
+      '<p class="muted" style="margin:0;font-size:13px">' + esc(t("detail.price")) + "</p>" +
+      '<p class="price"' + (isSold ? ' style="text-decoration:line-through;opacity:.6"' : "") + ">" + esc(pr.main) + (pr.label ? "<small>" + esc(pr.label) + "</small>" : "") + "</p>" +
+      (pr.sub ? '<p class="price-sub" style="margin:4px 0 0">' + esc(pr.sub) + "</p>" : "") +
+      (!isSold ? '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">' +
+        (wa ? '<a class="btn btn-whatsapp" target="_blank" rel="noopener noreferrer" href="' + esc(B.waLink(wa, waText)) + '">' + esc(t("detail.whatsappAbout")) + "</a>" : "") +
+        (s.phone ? '<a class="btn btn-outline" href="' + esc(B.telLink(s.phone)) + '">' + esc(t("detail.callUs", { phone: s.phone })) + "</a>" : "") +
+      "</div>" : "") +
+    "</div>" +
+    (!isSold ?
+      '<div class="panel"><h2 style="margin:0 0 14px;font-size:18px">' + esc(t("detail.testDriveTitle")) + "</h2>" +
+      '<form id="td-form" novalidate style="display:flex;flex-direction:column;gap:14px">' +
+        '<div class="field"><label for="td-name">' + esc(t("form.name")) + ' *</label><input id="td-name" name="name" class="input" maxlength="120" autocomplete="name"></div>' +
+        '<div class="field"><label for="td-phone">' + esc(t("form.phone")) + '</label><input id="td-phone" name="phone" type="tel" class="input" maxlength="40" autocomplete="tel"></div>' +
+        '<div class="field"><label for="td-email">' + esc(t("form.email")) + '</label><input id="td-email" name="email" type="email" class="input" maxlength="200" autocomplete="email"></div>' +
+        '<p class="muted" style="margin:0;font-size:13px">' + esc(t("form.phoneOrEmail")) + "</p>" +
+        '<div class="field"><label for="td-msg">' + esc(t("form.message")) + '</label><textarea id="td-msg" name="message" class="textarea" maxlength="4000" placeholder="' + esc(t("form.testDriveMessagePlaceholder")) + '"></textarea></div>' +
+        '<label class="check" style="align-items:flex-start"><input type="checkbox" name="consent" style="margin-top:2px"><span>' + esc(t("form.consent")) + ' <a href="privacy.html">' + esc(t("footer.privacy")) + "</a></span></label>" +
+        '<p class="form-error" role="alert" data-form-error hidden></p>' +
+        '<p class="form-ok" role="status" data-form-ok hidden>' + esc(t("form.success")) + "</p>" +
+        '<button type="submit" class="btn btn-gold">' + esc(t("form.sendWhatsapp")) + "</button>" +
+        '<p class="wa-note">' + esc(t("form.whatsappNote")) + "</p>" +
+      "</form></div>" : "") +
+    "</aside></div>";
+
+  // Galerij
+  var idx = 0;
+  var gal = document.getElementById("gallery");
+  function drawGallery() {
+    if (!photos.length) {
+      gal.innerHTML = '<div class="gallery-main">' + B.photoBox(v) + "</div>";
+      return;
+    }
+    var counter = t("detail.photo", { n: idx + 1, total: photos.length });
+    gal.innerHTML =
+      '<div class="gallery-main"><img src="' + esc(photos[idx]) + '" alt="' + esc(title + " – " + counter) + '" style="object-fit:contain">' +
+      (photos.length > 1
+        ? '<button type="button" class="gallery-nav prev" aria-label="' + esc(t("detail.prevPhoto")) + '">‹</button>' +
+          '<button type="button" class="gallery-nav next" aria-label="' + esc(t("detail.nextPhoto")) + '">›</button>'
+        : "") +
+      '<span class="gallery-count" aria-live="polite">' + (idx + 1) + " / " + photos.length + "</span></div>" +
+      (photos.length > 1
+        ? '<div class="thumbs">' + photos.map(function (src, i) {
+            return '<button type="button" data-i="' + i + '"' + (i === idx ? ' aria-current="true"' : "") +
+              ' aria-label="' + esc(t("detail.photo", { n: i + 1, total: photos.length })) + '"><img src="' + esc(src) + '" alt=""></button>';
+          }).join("") + "</div>"
+        : "");
+    var prev = gal.querySelector(".prev"), next = gal.querySelector(".next");
+    if (prev) prev.onclick = function () { idx = (idx - 1 + photos.length) % photos.length; drawGallery(); };
+    if (next) next.onclick = function () { idx = (idx + 1) % photos.length; drawGallery(); };
+    gal.querySelectorAll("[data-i]").forEach(function (b) {
+      b.onclick = function () { idx = parseInt(b.getAttribute("data-i"), 10); drawGallery(); };
+    });
+  }
+  drawGallery();
+
+  var form = document.getElementById("td-form");
+  if (form) {
+    window.bindWhatsAppForm(form, function () {
+      return [t("detail.testDriveTitle") + " – " + title + " (" + v.year + ", " + pr.main + ") – Ref. " + ref, ""];
+    });
+  }
+})();
+</script>
+</body>
+</html>

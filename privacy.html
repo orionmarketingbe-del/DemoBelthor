@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Belthor Automotive</title>
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main class="container" style="padding:40px 24px 64px">
+  <div class="prose" id="privacy"></div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script>
+(function () {
+  var B = window.Belthor, t = B.t, esc = B.esc;
+  B.renderChrome("");
+  document.title = t("privacy.title") + " | Belthor Automotive";
+  var s = B.getSettings();
+  var company = [s.company_name || "Belthor Automotive", s.kbo_number].filter(Boolean).join(", ");
+  var contact = [s.company_name, s.address, s.email, s.phone].filter(Boolean).join("\n");
+  document.getElementById("privacy").innerHTML =
+    '<h1 class="display">' + esc(t("privacy.title")) + "</h1>" +
+    "<p>" + esc(t("privacy.p1", { company: company })) + "</p>" +
+    "<p>" + esc(t("privacy.p2")) + "</p>" +
+    "<p>" + esc(t("privacy.p3")) + "</p>" +
+    "<p>" + esc(t("privacy.p4")) + "</p>" +
+    "<p>" + esc(t("privacy.p5")) + "</p>" +
+    (contact ? '<p style="white-space:pre-line">' + esc(contact) + "</p>" : "");
+})();
+</script>
+</body>
+</html>

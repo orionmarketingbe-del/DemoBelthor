@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belthor Automotive</title>
+<meta name="description" content="Belthor Automotive – voitures d'occasion à Bruxelles · tweedehandswagens in Brussel · carros usados em Bruxelas.">
+<link rel="icon" href="img/icon.png">
+<meta property="og:image" content="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main>
+  <section class="hero-x">
+    <div class="container hero-grid">
+      <div class="reveal">
+        <p class="kicker" data-i18n="home.kicker"></p>
+        <h1 class="display" id="hero-title"></h1>
+        <p class="lead" data-i18n="home.subtitle"></p>
+        <div class="hero-cta">
+          <a href="aanbod.html" class="btn btn-gold"><span data-i18n="home.viewAll"></span> →</a>
+          <a href="#" class="btn btn-ghost" id="hero-wa" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </div>
+      </div>
+
+      <div class="hero-stage" aria-hidden="true">
+        <svg viewBox="0 40 1900 320" role="presentation">
+          <defs>
+            <linearGradient id="goldStroke" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#8a6a24"/><stop offset=".3" stop-color="#e8cc78"/>
+              <stop offset=".5" stop-color="#fff2c4"/><stop offset=".7" stop-color="#d4af52"/><stop offset="1" stop-color="#f0d68e"/>
+            </linearGradient>
+            <radialGradient id="floor" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#d4af52" stop-opacity=".4"/><stop offset="1" stop-color="#d4af52" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="beamGrad" x1="0" x2="1">
+              <stop offset="0" stop-color="#fff6d8" stop-opacity=".5"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="lamp"><stop offset="0" stop-color="#fffbe9"/><stop offset=".4" stop-color="#f6e3a1"/><stop offset="1" stop-color="#d4af52" stop-opacity="0"/></radialGradient>
+            <radialGradient id="tail"><stop offset="0" stop-color="#ffb3b3" stop-opacity=".9"/><stop offset=".45" stop-color="#ed2939" stop-opacity=".7"/><stop offset="1" stop-color="#ed2939" stop-opacity="0"/></radialGradient>
+            <linearGradient id="mirrorGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2c4"/><stop offset="1" stop-color="#8a6a24"/></linearGradient>
+          </defs>
+          <ellipse class="floor-glow" cx="900" cy="318" rx="820" ry="36" fill="url(#floor)"/>
+          <polygon class="beam" points="1696,268 1900,210 1900,330" fill="url(#beamGrad)"/>
+          <line class="road-line" x1="0" y1="340" x2="1900" y2="340" stroke="#d4af52" stroke-opacity=".35" stroke-width="5"/>
+          <!-- silhouet naar het Belthor-logo: dak, gordellijn, zijlijn, wielkasten -->
+          <path class="car-line" pathLength="1" d="M405 158 C560 118 720 78 880 72 C1010 68 1130 105 1225 163"/>
+          <path class="car-line" pathLength="1" d="M65 190 C300 168 520 158 700 165 C820 170 900 200 1000 198 C1150 195 1300 170 1450 182 C1560 192 1650 230 1700 268"/>
+          <path class="car-line" pathLength="1" d="M612 126 C740 168 870 218 975 250"/>
+          <path class="car-line thin" pathLength="1" d="M65 190 C140 205 200 215 250 228"/>
+          <path class="car-line thin" pathLength="1" d="M1030 228 C1150 231 1250 225 1335 218"/>
+          <path class="car-line thin" pathLength="1" d="M755 172 L808 186"/>
+          <path class="car-line car-wheel" pathLength="1" d="M335 305 C380 228 525 222 578 305"/>
+          <path class="car-line car-wheel" pathLength="1" d="M1315 300 C1362 224 1490 220 1532 292"/>
+          <path class="car-line thin" pathLength="1" d="M1540 236 C1585 246 1640 256 1698 270 M1556 238 L1598 272 L1700 274"/>
+          <ellipse class="headlight" cx="1070" cy="160" rx="46" ry="24" fill="url(#mirrorGrad)" style="filter:drop-shadow(0 0 6px rgba(246,227,161,.5))"/>
+          <polygon class="taillight" points="82,230 205,236 216,243 148,252" fill="#ed2939" style="filter:drop-shadow(0 0 10px rgba(237,41,57,.9))"/>
+          <circle class="taillight" cx="150" cy="241" r="40" fill="url(#tail)"/>
+          <circle class="headlight" cx="1692" cy="268" r="34" fill="url(#lamp)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+    </div>
+  </section>
+
+  <div class="container search-wrap reveal">
+      <form class="search-card" action="aanbod.html" method="get" role="search">
+        <fieldset class="type-tabs">
+          <legend class="sr-only" data-i18n="stock.type"></legend>
+          <label><input type="radio" name="type" value="" checked><span data-i18n="common.all"></span></label>
+          <label><input type="radio" name="type" value="car"><span data-i18n="home.tabCars"></span></label>
+          <label><input type="radio" name="type" value="van"><span data-i18n="home.tabVans"></span></label>
+        </fieldset>
+        <div class="search-row">
+          <div class="field">
+            <label for="s-make" data-i18n="stock.make"></label>
+            <select id="s-make" name="make" class="select"></select>
+          </div>
+          <div class="field">
+            <label for="s-model" data-i18n="stock.model"></label>
+            <input id="s-model" name="model" class="input" maxlength="80" data-i18n-ph="stock.modelPlaceholder">
+          </div>
+          <div class="field">
+            <label for="s-price" data-i18n="stock.priceTo"></label>
+            <select id="s-price" name="priceMax" class="select"></select>
+          </div>
+          <div class="field">
+            <label for="s-year" data-i18n="stock.yearFrom"></label>
+            <select id="s-year" name="yearMin" class="select"></select>
+          </div>
+          <div class="field">
+            <label for="s-km" data-i18n="stock.kmMax"></label>
+            <select id="s-km" name="kmMax" class="select"></select>
+          </div>
+          <div class="field">
+            <label for="s-fuel" data-i18n="stock.fuel"></label>
+            <select id="s-fuel" name="fuel" class="select"></select>
+          </div>
+          <button type="submit" class="btn btn-gold" data-i18n="home.showResults"></button>
+        </div>
+      </form>
+  </div>
+
+  <section class="section" style="padding-bottom:8px">
+    <div class="container stats-x">
+      <div class="stat-x reveal"><strong class="gold-text" data-count="0" id="stat-online">0</strong><span data-i18n="stock.title"></span></div>
+      <div class="stat-x reveal"><strong class="gold-text" data-count="0" id="stat-vans">0</strong><span data-i18n="nav.vans"></span></div>
+      <div class="stat-x reveal"><strong class="chrome-text" style="font-size:30px;line-height:44px">FR · NL · PT · EN</strong><span data-i18n="home.uspTitle4"></span></div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:16px">
+    <div class="container usps">
+      <div class="usp reveal"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e2be62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div><h3 data-i18n="home.uspTitle1"></h3><p data-i18n="home.uspText1"></p></div>
+      <div class="usp reveal"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e2be62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></div><h3 data-i18n="home.uspTitle2"></h3><p data-i18n="home.uspText2"></p></div>
+      <div class="usp reveal"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e2be62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg></div><h3 data-i18n="home.uspTitle3"></h3><p data-i18n="home.uspText3"></p></div>
+      <div class="usp reveal"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e2be62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></div><h3 data-i18n="home.uspTitle4"></h3><p data-i18n="home.uspText4"></p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="display" data-i18n="home.latest"></h2>
+        <a href="aanbod.html"><span data-i18n="home.viewAll"></span> →</a>
+      </div>
+      <div class="card-grid" id="latest"></div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="vans-section" hidden>
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2 class="display" data-i18n="home.vansTitle"></h2>
+          <p class="muted" style="margin:6px 0 0" data-i18n="home.vansText"></p>
+        </div>
+        <a href="aanbod.html?type=van"><span data-i18n="home.viewAll"></span> →</a>
+      </div>
+      <div class="card-grid" id="vans"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="cta-band reveal" style="display:flex;flex-wrap:wrap;gap:40px;align-items:center">
+        <div style="flex:1 1 380px">
+          <p class="kicker" data-i18n="home.sellKicker"></p>
+          <h2 class="display" style="margin:0 0 16px;font-size:clamp(28px,3.4vw,40px);line-height:1.12" data-i18n="home.sellTitle"></h2>
+          <p style="margin:0 0 24px;color:var(--text-2)" data-i18n="home.sellText"></p>
+          <a href="verkopen.html" class="btn btn-gold" data-i18n="home.sellCta"></a>
+        </div>
+        <ol class="steps" style="flex:1 1 340px">
+          <li><span class="num" aria-hidden="true">1</span><div><strong data-i18n="home.step1Title"></strong><p data-i18n="home.step1Text"></p></div></li>
+          <li><span class="num" aria-hidden="true">2</span><div><strong data-i18n="home.step2Title"></strong><p data-i18n="home.step2Text"></p></div></li>
+          <li><span class="num" aria-hidden="true">3</span><div><strong data-i18n="home.step3Title"></strong><p data-i18n="home.step3Text"></p></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script>
+(function () {
+  var B = window.Belthor;
+  B.renderChrome("home");
+
+  // Titel: eerste deel wit, tweede deel in goud (splitsen op de eerste komma)
+  var full = B.t("home.title"), i = full.indexOf(",");
+  var h1 = document.getElementById("hero-title");
+  h1.innerHTML = i > 0
+    ? B.esc(full.slice(0, i + 1)) + ' <span class="gold-text">' + B.esc(full.slice(i + 1).trim()) + "</span>"
+    : '<span class="gold-text">' + B.esc(full) + "</span>";
+
+  var wa = B.waNumber(B.getSettings());
+  var heroWa = document.getElementById("hero-wa");
+  if (wa) heroWa.href = B.waLink(wa); else heroWa.hidden = true;
+
+  // Lopende band met de troeven (2x voor een naadloze lus)
+  var items = ["home.uspTitle1", "home.uspTitle2", "home.uspTitle3", "home.uspTitle4", "home.kicker"].map(function (k) { return "<span>" + B.esc(B.t(k)) + "</span>"; }).join("");
+  document.getElementById("ticker").innerHTML = items + items + items + items;
+  var all = B.visibleVehicles().filter(function (v) { return v.status !== "sold"; })
+    .sort(function (a, b) { return String(b.created_at).localeCompare(String(a.created_at)); });
+
+  var latest = all.filter(function (v) { return v.vehicle_type !== "van"; }).slice(0, 8);
+  var vans = all.filter(function (v) { return v.vehicle_type === "van"; }).slice(0, 4);
+  var latestEl = document.getElementById("latest");
+  latestEl.innerHTML = latest.length
+    ? latest.map(function (v) { return B.carCard(v); }).join("")
+    : '<p class="muted">' + B.esc(B.t("home.emptyStock")) + "</p>";
+  document.getElementById("stat-online").setAttribute("data-count", String(all.length));
+  document.getElementById("stat-vans").setAttribute("data-count", String(all.filter(function (v) { return v.vehicle_type === "van"; }).length));
+  if (vans.length) {
+    document.getElementById("vans").innerHTML = vans.map(function (v) { return B.carCard(v); }).join("");
+    document.getElementById("vans-section").hidden = false;
+  }
+
+  // Zoekvelden vullen
+  function opts(el, items) {
+    el.innerHTML = items.map(function (o) { return '<option value="' + B.esc(o[0]) + '">' + B.esc(o[1]) + "</option>"; }).join("");
+  }
+  var makes = Array.from(new Set(all.map(function (v) { return v.make; }))).sort(function (a, b) { return a.localeCompare(b); });
+  opts(document.getElementById("s-make"), [["", B.t("common.allMakes")]].concat(makes.map(function (m) { return [m, m]; })));
+  opts(document.getElementById("s-price"), [["", B.t("common.noMax")]].concat([3000, 5000, 7500, 10000, 15000, 20000, 30000].map(function (p) { return [p, B.euro(p)]; })));
+  var y = new Date().getFullYear();
+  opts(document.getElementById("s-year"), [["", B.t("common.noMin")]].concat([4, 8, 12, 16, 20, 24].map(function (d) { return [y - d, String(y - d)]; })));
+  opts(document.getElementById("s-km"), [["", B.t("common.noMax")]].concat([50000, 100000, 150000, 200000, 250000].map(function (k) { return [k, B.km(k)]; })));
+  opts(document.getElementById("s-fuel"), [["", B.t("common.all")]].concat(["petrol", "diesel", "hybrid", "plugin_hybrid", "electric", "lpg", "cng", "other"].map(function (f) { return [f, B.t("vehicle.fuels." + f)]; })));
+})();
+</script>
+</body>
+</html>

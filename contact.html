@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belthor Automotive</title>
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main class="container" style="padding:40px 24px 64px">
+  <h1 class="display" style="margin:0 0 8px;font-size:34px" data-i18n="contact.title"></h1>
+  <p style="margin:0 0 28px;color:var(--text-2)" data-i18n="contact.intro"></p>
+
+  <div class="detail-layout">
+    <div class="panel" style="flex:999 1 520px;min-width:0">
+      <form id="contact-form" novalidate style="display:flex;flex-direction:column;gap:14px">
+        <div class="grid-fields">
+          <div class="field"><label for="k-name"><span data-i18n="form.name"></span> *</label><input id="k-name" name="name" class="input" maxlength="120" autocomplete="name"></div>
+          <div class="field"><label for="k-phone" data-i18n="form.phone"></label><input id="k-phone" name="phone" type="tel" class="input" maxlength="40" autocomplete="tel"></div>
+          <div class="field"><label for="k-email" data-i18n="form.email"></label><input id="k-email" name="email" type="email" class="input" maxlength="200" autocomplete="email"></div>
+        </div>
+        <p class="muted" style="margin:0;font-size:13px" data-i18n="form.phoneOrEmail"></p>
+        <div class="field"><label for="k-msg" data-i18n="form.message"></label><textarea id="k-msg" name="message" class="textarea" maxlength="4000"></textarea></div>
+        <label class="check" style="align-items:flex-start"><input type="checkbox" name="consent" style="margin-top:2px"><span><span data-i18n="form.consent"></span> <a href="privacy.html" data-i18n="footer.privacy"></a></span></label>
+        <p class="form-error" role="alert" data-form-error hidden></p>
+        <p class="form-ok" role="status" data-form-ok hidden data-i18n="form.success"></p>
+        <button type="submit" class="btn btn-gold" data-i18n="form.sendWhatsapp"></button>
+        <p class="wa-note" data-i18n="form.whatsappNote"></p>
+      </form>
+    </div>
+    <aside class="detail-aside" id="contact-side"></aside>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/forms.js"></script>
+<script>
+(function () {
+  var B = window.Belthor, t = B.t, esc = B.esc;
+  B.renderChrome("contact");
+  document.title = t("contact.title") + " | Belthor Automotive";
+  var s = B.getSettings();
+  var wa = B.waNumber(s);
+  var html = "";
+  if (wa) {
+    html += '<div class="panel"><p style="margin:0 0 12px">' + esc(t("contact.whatsappFastest")) + "</p>" +
+      '<a class="btn btn-whatsapp btn-block" target="_blank" rel="noopener noreferrer" href="' + esc(B.waLink(wa)) + '">WhatsApp</a>' +
+      (s.phone ? '<a class="btn btn-outline btn-block" style="margin-top:10px" href="' + esc(B.telLink(s.phone)) + '">' + esc(s.phone) + "</a>" : "") +
+      "</div>";
+  }
+  var info = [];
+  if (s.address) info.push("<div><strong>" + esc(t("contact.address")) + '</strong><p style="margin:4px 0 0;white-space:pre-line;color:var(--text-2)">' + esc(s.address) + "</p></div>");
+  if (s.opening_hours) info.push("<div><strong>" + esc(t("contact.hours")) + '</strong><p style="margin:4px 0 0;white-space:pre-line;color:var(--text-2)">' + esc(s.opening_hours) + "</p></div>");
+  if (s.email) info.push("<div><strong>" + esc(t("form.email")) + '</strong><p style="margin:4px 0 0"><a href="mailto:' + esc(s.email) + '">' + esc(s.email) + "</a></p></div>");
+  if (info.length) html += '<div class="panel" style="display:flex;flex-direction:column;gap:14px">' + info.join("") + "</div>";
+  document.getElementById("contact-side").innerHTML = html;
+  window.bindWhatsAppForm(document.getElementById("contact-form"), function () { return [t("contact.title") + " – Belthor Automotive", ""]; });
+})();
+</script>
+</body>
+</html>

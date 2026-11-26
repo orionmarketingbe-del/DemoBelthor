@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belthor Automotive</title>
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main class="container" style="padding:40px 24px 64px;max-width:900px">
+  <p class="kicker" data-i18n="home.sellKicker"></p>
+  <h1 class="display" style="margin:0 0 12px;font-size:34px;line-height:1.15" data-i18n="sell.title"></h1>
+  <p style="margin:0 0 28px;color:var(--text-2)" data-i18n="sell.intro"></p>
+
+  <div class="panel">
+    <form id="sell-form" novalidate style="display:flex;flex-direction:column;gap:14px">
+      <div class="grid-fields">
+        <div class="field"><label for="c-make"><span data-i18n="sell.make"></span> *</label><input id="c-make" name="car_make" class="input" maxlength="60"></div>
+        <div class="field"><label for="c-model"><span data-i18n="sell.model"></span> *</label><input id="c-model" name="car_model" class="input" maxlength="80"></div>
+        <div class="field"><label for="c-year" data-i18n="sell.year"></label><input id="c-year" name="car_year" class="input" inputmode="numeric" maxlength="4"></div>
+        <div class="field"><label for="c-km" data-i18n="sell.mileage"></label><input id="c-km" name="car_mileage" class="input" inputmode="numeric" maxlength="9"></div>
+      </div>
+      <fieldset style="border:0;padding:0;margin:0">
+        <legend class="field-label" style="margin-bottom:4px" data-i18n="sell.preference"></legend>
+        <label class="check"><input type="radio" name="preference" value="prefBuy"> <span data-i18n="sell.prefBuy"></span></label>
+        <label class="check"><input type="radio" name="preference" value="prefConsign"> <span data-i18n="sell.prefConsign"></span></label>
+        <label class="check"><input type="radio" name="preference" value="prefUnsure" checked> <span data-i18n="sell.prefUnsure"></span></label>
+      </fieldset>
+      <div class="grid-fields">
+        <div class="field"><label for="c-name"><span data-i18n="form.name"></span> *</label><input id="c-name" name="name" class="input" maxlength="120" autocomplete="name"></div>
+        <div class="field"><label for="c-phone" data-i18n="form.phone"></label><input id="c-phone" name="phone" type="tel" class="input" maxlength="40" autocomplete="tel"></div>
+        <div class="field"><label for="c-email" data-i18n="form.email"></label><input id="c-email" name="email" type="email" class="input" maxlength="200" autocomplete="email"></div>
+      </div>
+      <p class="muted" style="margin:0;font-size:13px" data-i18n="form.phoneOrEmail"></p>
+      <div class="field"><label for="c-msg" data-i18n="form.message"></label><textarea id="c-msg" name="message" class="textarea" maxlength="4000"></textarea></div>
+      <label class="check" style="align-items:flex-start"><input type="checkbox" name="consent" style="margin-top:2px"><span><span data-i18n="form.consent"></span> <a href="privacy.html" data-i18n="footer.privacy"></a></span></label>
+      <p class="form-error" role="alert" data-form-error hidden></p>
+      <p class="form-ok" role="status" data-form-ok hidden data-i18n="form.success"></p>
+      <button type="submit" class="btn btn-gold" data-i18n="form.sendWhatsapp"></button>
+      <p class="wa-note" data-i18n="form.whatsappNote"></p>
+    </form>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/forms.js"></script>
+<script>
+(function () {
+  var B = window.Belthor, t = B.t;
+  B.renderChrome("sell");
+  document.title = t("sell.title") + " | Belthor Automotive";
+  window.bindWhatsAppForm(document.getElementById("sell-form"), function (fd) {
+    var v = function (k) { return String(fd.get(k) || "").trim(); };
+    var lines = [t("sell.title"), ""];
+    lines.push(t("sell.make") + ": " + v("car_make"));
+    lines.push(t("sell.model") + ": " + v("car_model"));
+    if (v("car_year")) lines.push(t("sell.year") + ": " + v("car_year"));
+    if (v("car_mileage")) lines.push(t("sell.mileage") + ": " + v("car_mileage") + " km");
+    if (v("preference")) lines.push(t("sell.preference") + " " + t("sell." + v("preference")));
+    lines.push("");
+    return lines;
+  }, ["car_make", "car_model"]);
+})();
+</script>
+</body>
+</html>

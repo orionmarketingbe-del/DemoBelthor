@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="fr-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belthor Automotive</title>
+<link rel="icon" href="img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<div class="flag-strip" aria-hidden="true"><span></span><span></span><span></span></div>
+<header id="site-header"></header>
+
+<main class="container" style="padding:24px 24px 64px">
+  <p class="breadcrumbs"><a href="index.html">Home</a> › <span data-i18n="stock.title"></span></p>
+
+  <div class="section-head" style="margin-bottom:20px">
+    <h1 class="display" style="margin:0;font-size:32px"><span data-i18n="stock.title"></span>
+      <span class="muted" id="count" style="font-family:var(--font-body);font-size:18px;font-weight:500"></span></h1>
+    <div style="display:flex;align-items:center;gap:10px">
+      <label for="sort" class="field-label" data-i18n="stock.sort"></label>
+      <select id="sort" class="select" style="width:auto"></select>
+    </div>
+  </div>
+
+  <div class="stock-layout">
+    <form class="filters" id="filters" method="get" action="aanbod.html">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong data-i18n="stock.filters"></strong>
+        <a href="aanbod.html" style="font-size:13px;font-weight:600" data-i18n="stock.clear"></a>
+      </div>
+      <input type="hidden" name="sort" id="sort-hidden">
+      <div class="field">
+        <label for="f-type" data-i18n="stock.type"></label>
+        <select id="f-type" name="type" class="select"></select>
+      </div>
+      <div class="field">
+        <label for="f-make" data-i18n="stock.make"></label>
+        <select id="f-make" name="make" class="select"></select>
+      </div>
+      <div class="field">
+        <label for="f-model" data-i18n="stock.model"></label>
+        <input id="f-model" name="model" class="input" maxlength="80" data-i18n-ph="stock.modelPlaceholder">
+      </div>
+      <div class="two-col">
+        <div class="field"><label for="f-pmin" data-i18n="stock.priceFrom"></label><input id="f-pmin" name="priceMin" class="input" inputmode="numeric"></div>
+        <div class="field"><label for="f-pmax" data-i18n="stock.priceTo"></label><input id="f-pmax" name="priceMax" class="input" inputmode="numeric"></div>
+        <div class="field"><label for="f-ymin" data-i18n="stock.yearFrom"></label><input id="f-ymin" name="yearMin" class="input" inputmode="numeric"></div>
+        <div class="field"><label for="f-ymax" data-i18n="stock.yearTo"></label><input id="f-ymax" name="yearMax" class="input" inputmode="numeric"></div>
+      </div>
+      <div class="field">
+        <label for="f-km" data-i18n="stock.kmMax"></label>
+        <input id="f-km" name="kmMax" class="input" inputmode="numeric">
+      </div>
+      <fieldset id="f-fuels"><legend data-i18n="stock.fuel"></legend></fieldset>
+      <div class="field">
+        <label for="f-tr" data-i18n="stock.transmission"></label>
+        <select id="f-tr" name="transmission" class="select"></select>
+      </div>
+      <label class="check"><input type="checkbox" name="sold" value="1" id="f-sold"><span data-i18n="stock.showSold"></span></label>
+      <button type="submit" class="btn btn-gold btn-block" data-i18n="stock.apply"></button>
+    </form>
+
+    <div class="stock-results" id="results"></div>
+  </div>
+</main>
+
+<footer id="site-footer"></footer>
+
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/fx.js"></script>
+<script>
+(function () {
+  var B = window.Belthor;
+  B.renderChrome("stock");
+  var p = new URLSearchParams(window.location.search);
+  var int = function (k) {
+    var s = (p.get(k) || "").replace(/\D/g, "");
+    return s ? parseInt(s, 10) : null;
+  };
+  var f = {
+    type: p.get("type") || "",
+    make: p.get("make") || "",
+    model: (p.get("model") || "").trim().toLowerCase(),
+    priceMin: int("priceMin"), priceMax: int("priceMax"),
+    yearMin: int("yearMin"), yearMax: int("yearMax"),
+    kmMax: int("kmMax"),
+    fuels: p.getAll("fuel").filter(Boolean),
+    transmission: p.get("transmission") || "",
+    sold: p.get("sold") === "1",
+    sort: p.get("sort") || "newest",
+  };
+  if (f.type === "van") document.title = B.t("nav.vans") + " | Belthor Automotive";
+  else document.title = B.t("stock.title") + " | Belthor Automotive";
+
+  var all = B.visibleVehicles();
+  var list = all.filter(function (v) {
+    if (!f.sold && v.status === "sold") return false;
+    if (f.type && v.vehicle_type !== f.type) return false;
+    if (f.make && v.make !== f.make) return false;
+    if (f.model && (v.model + " " + (v.version || "")).toLowerCase().indexOf(f.model) < 0) return false;
+    if (f.priceMin != null && v.price_eur < f.priceMin) return false;
+    if (f.priceMax != null && v.price_eur > f.priceMax) return false;
+    if (f.yearMin != null && v.year < f.yearMin) return false;
+    if (f.yearMax != null && v.year > f.yearMax) return false;
+    // Onbekende km-stand valt weg zodra iemand op km filtert (we kunnen het niet garanderen).
+    if (f.kmMax != null && (v.mileage_km == null || v.mileage_km > f.kmMax)) return false;
+    if (f.fuels.length && f.fuels.indexOf(v.fuel) < 0) return false;
+    if (f.transmission && v.transmission !== f.transmission) return false;
+    return true;
+  });
+
+  var sorters = {
+    newest: function (a, b) { return String(b.created_at).localeCompare(String(a.created_at)); },
+    price_asc: function (a, b) { return a.price_eur - b.price_eur; },
+    price_desc: function (a, b) { return b.price_eur - a.price_eur; },
+    km_asc: function (a, b) { return (a.mileage_km == null ? Infinity : a.mileage_km) - (b.mileage_km == null ? Infinity : b.mileage_km); },
+    year_desc: function (a, b) { return b.year - a.year || (b.month || 0) - (a.month || 0); },
+  };
+  if (!sorters[f.sort]) f.sort = "newest";
+  list.sort(sorters[f.sort]);
+
+  document.getElementById("count").textContent =
+    "(" + (list.length === 1 ? B.t("stock.resultsOne") : B.t("stock.resultsMany", { n: list.length })) + ")";
+  document.getElementById("results").innerHTML = list.length
+    ? list.map(function (v) { return B.carCard(v, "row"); }).join("")
+    : '<div class="panel"><p style="margin:0">' + B.esc(B.t("stock.noResults")) + "</p></div>";
+
+  // Formulier vullen met de huidige filters
+  function opts(id, items, current) {
+    var el = document.getElementById(id);
+    el.innerHTML = items.map(function (o) {
+      return '<option value="' + B.esc(o[0]) + '"' + (String(o[0]) === String(current) ? " selected" : "") + ">" + B.esc(o[1]) + "</option>";
+    }).join("");
+  }
+  opts("f-type", [["", B.t("common.all")], ["car", B.t("vehicle.types.car")], ["van", B.t("vehicle.types.van")], ["pickup", B.t("vehicle.types.pickup")]], f.type);
+  var makes = Array.from(new Set(all.map(function (v) { return v.make; }))).sort(function (a, b) { return a.localeCompare(b); });
+  opts("f-make", [["", B.t("common.allMakes")]].concat(makes.map(function (m) { return [m, m]; })), f.make);
+  opts("f-tr", [["", B.t("common.all")], ["manual", B.t("vehicle.transmissions.manual")], ["automatic", B.t("vehicle.transmissions.automatic")]], f.transmission);
+  document.getElementById("f-model").value = p.get("model") || "";
+  [["f-pmin", "priceMin"], ["f-pmax", "priceMax"], ["f-ymin", "yearMin"], ["f-ymax", "yearMax"], ["f-km", "kmMax"]].forEach(function (x) {
+    var val = int(x[1]);
+    document.getElementById(x[0]).value = val == null ? "" : val;
+  });
+  document.getElementById("f-sold").checked = f.sold;
+  var fuelBox = document.getElementById("f-fuels");
+  ["petrol", "diesel", "hybrid", "plugin_hybrid", "electric", "lpg", "cng", "other"].forEach(function (fu) {
+    var lab = document.createElement("label");
+    lab.className = "check";
+    lab.innerHTML = '<input type="checkbox" name="fuel" value="' + fu + '"' + (f.fuels.indexOf(fu) >= 0 ? " checked" : "") + "> " + B.esc(B.t("vehicle.fuels." + fu));
+    fuelBox.appendChild(lab);
+  });
+
+  var sortHidden = document.getElementById("sort-hidden");
+  sortHidden.value = f.sort;
+  opts("sort", [
+    ["newest", B.t("stock.sortNewest")], ["price_asc", B.t("stock.sortPriceAsc")], ["price_desc", B.t("stock.sortPriceDesc")],
+    ["km_asc", B.t("stock.sortKmAsc")], ["year_desc", B.t("stock.sortYearDesc")],
+  ], f.sort);
+  document.getElementById("sort").addEventListener("change", function (e) {
+    var q = new URLSearchParams(window.location.search);
+    q.set("sort", e.target.value);
+    window.location.search = q.toString();
+  });
+})();
+</script>
+</body>
+</html>
